@@ -1,7 +1,8 @@
 # Core dependencies for SpikeZIP-TF
-# PyTorch 2.2.0 with compatibility patches for timm 0.3.2
-torch==2.2.0
-torchvision==0.17.0
+# PyTorch >= 2.6.0 for security (fixes CVE vulnerabilities in earlier versions)
+# Compatible with timm 0.3.2 when patched
+torch>=2.6.0
+torchvision>=0.20.0
 timm==0.3.2
 numpy<2.0.0
 scipy>=1.5.0
