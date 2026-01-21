@@ -55,6 +55,37 @@ year={2024}
 
 ## Usage
 
+### Setup Environment
+
+Before running any training scripts, you need to set up the Python environment with the required dependencies:
+
+```bash
+# Option 1: Automated setup (recommended)
+./setup_environment.sh
+
+# Option 2: Manual setup
+pip install -r requirements.txt
+# Then patch timm 0.3.2 to work with modern PyTorch
+python -c "
+import timm, os
+helpers_path = os.path.join(os.path.dirname(timm.__file__), 'models/layers/helpers.py')
+with open(helpers_path, 'r') as f:
+    content = f.read()
+content = content.replace('from torch._six import container_abcs', 'import collections.abc as container_abcs')
+with open(helpers_path, 'w') as f:
+    f.write(content)
+print('Patched timm successfully')
+"
+```
+
+**Dependencies:**
+- Python 3.8+
+- PyTorch 2.2.0
+- torchvision 0.17.0
+- timm 0.3.2 (with compatibility patch)
+- numpy < 2.0.0
+- Other dependencies listed in requirements.txt
+
 ### Train
 
 Train the Quantized-ANN with pretrain model.
