@@ -15,3 +15,7 @@ submitit>=1.4.0
 
 # Additional utilities
 tensorboard>=2.8.0
+
+# Optional: For neuromorphic (DVS) datasets support
+# Uncomment if you need to use DVS datasets
+# spikingjelly>=0.0.0.0.14
