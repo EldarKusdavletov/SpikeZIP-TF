@@ -8,12 +8,54 @@ echo "Installing Python dependencies..."
 pip install -r requirements.txt
 
 echo "Patching timm 0.3.2 to work with modern PyTorch..."
+
+# Use Python to safely patch the timm library
+python << 'PYTHON_SCRIPT'
+import sys
+import os
+
+try:
+    import timm
+except ImportError:
+    print("Error: timm is not installed. Please run 'pip install -r requirements.txt' first.")
+    sys.exit(1)
+
 # Find the timm helpers.py file
-TIMM_HELPERS=$(python -c "import timm; import os; print(os.path.join(os.path.dirname(timm.__file__), 'models/layers/helpers.py'))")
+helpers_path = os.path.join(os.path.dirname(timm.__file__), 'models/layers/helpers.py')
 
-# Patch the torch._six import to use collections.abc instead
-sed -i 's/from torch._six import container_abcs/import collections.abc as container_abcs/g' "$TIMM_HELPERS"
+if not os.path.exists(helpers_path):
+    print(f"Error: Could not find timm helpers.py at {helpers_path}")
+    sys.exit(1)
 
+# Read the file
+with open(helpers_path, 'r') as f:
+    content = f.read()
+
+# Check if patch is already applied
+if 'import collections.abc as container_abcs' in content:
+    print("Patch already applied to timm.")
+    sys.exit(0)
+
+# Apply the patch
+old_import = 'from torch._six import container_abcs'
+new_import = 'import collections.abc as container_abcs'
+
+if old_import not in content:
+    print("Warning: Expected import not found in timm helpers.py")
+    print("The library may already be compatible or may have a different version.")
+    sys.exit(0)
+
+content = content.replace(old_import, new_import)
+
+# Write back the patched content
+with open(helpers_path, 'w') as f:
+    f.write(content)
+
+print(f"Successfully patched {helpers_path}")
+print("Note: This modifies the installed timm package.")
+PYTHON_SCRIPT
+
+echo ""
 echo "Setup complete! You can now run the training scripts."
 echo ""
 echo "Example usage:"
