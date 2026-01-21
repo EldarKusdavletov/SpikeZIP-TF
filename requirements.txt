@@ -1,0 +1,17 @@
+# Core dependencies for SpikeZIP-TF
+# PyTorch 2.2.0 with compatibility patches for timm 0.3.2
+torch==2.2.0
+torchvision==0.17.0
+timm==0.3.2
+numpy<2.0.0
+scipy>=1.5.0
+pillow>=8.0.0
+
+# Experiment tracking
+wandb>=0.12.0
+
+# Job submission
+submitit>=1.4.0
+
+# Additional utilities
+tensorboard>=2.8.0
