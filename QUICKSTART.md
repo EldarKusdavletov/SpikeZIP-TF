@@ -8,6 +8,8 @@ This guide will help you get started with SpikeZIP-TF.
 - CUDA-capable GPU (recommended for training)
 - ImageNet dataset (for training/evaluation)
 
+**Important Security Note**: This setup uses PyTorch >= 2.6.0 to address critical security vulnerabilities in earlier versions.
+
 ## Installation
 
 ### Option 1: Automated Setup (Recommended)

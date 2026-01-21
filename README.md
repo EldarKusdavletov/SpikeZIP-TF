@@ -80,8 +80,8 @@ print('Patched timm successfully')
 
 **Dependencies:**
 - Python 3.8+
-- PyTorch 2.2.0
-- torchvision 0.17.0
+- PyTorch >= 2.6.0 (for security - fixes critical vulnerabilities)
+- torchvision >= 0.20.0
 - timm 0.3.2 (with compatibility patch)
 - numpy < 2.0.0
 - Other dependencies listed in requirements.txt
