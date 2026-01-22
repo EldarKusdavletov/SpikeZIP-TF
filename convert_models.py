@@ -55,11 +55,24 @@ class ModelConverter:
         """Load a pre-trained ANN model."""
         print(f"\nLoading ANN model from: {checkpoint_path}")
         
+        # Convert act_layer string to actual activation class
+        if isinstance(act_layer, str):
+            if act_layer.lower() == 'relu':
+                activation = nn.ReLU
+            elif act_layer.lower() == 'gelu':
+                activation = nn.GELU
+            else:
+                raise ValueError(f"Unsupported activation layer: {act_layer}")
+        else:
+            activation = act_layer
+        
         # Create model
+        from functools import partial
         model = models_vit.__dict__[model_name](
             num_classes=num_classes,
             global_pool=False,
-            act_layer=act_layer
+            act_layer=activation,
+            norm_layer=partial(nn.LayerNorm, eps=1e-6)
         )
         
         # Load checkpoint

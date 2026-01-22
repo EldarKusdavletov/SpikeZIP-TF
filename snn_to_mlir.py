@@ -238,8 +238,30 @@ def convert_snn_to_mlir(checkpoint_path: str, output_path: str, model_name: str 
     
     # For demonstration, we'll create a simple model structure
     # In practice, you'd load the actual model architecture
-    from models_vit import vit_small_patch16
-    model = vit_small_patch16(num_classes=1000, global_pool=False)
+    from models_vit import vit_small_patch16, vit_base_patch16, vit_large_patch16
+    from functools import partial
+    import torch.nn as nn
+    
+    model_constructors = {
+        'vit_small_patch16': lambda: vit_small_patch16(
+            num_classes=1000, global_pool=False, 
+            act_layer=nn.ReLU, norm_layer=partial(nn.LayerNorm, eps=1e-6)
+        ),
+        'vit_base_patch16': lambda: vit_base_patch16(
+            num_classes=1000, global_pool=False,
+            act_layer=nn.ReLU, norm_layer=partial(nn.LayerNorm, eps=1e-6)
+        ),
+        'vit_large_patch16': lambda: vit_large_patch16(
+            num_classes=1000, global_pool=False,
+            act_layer=nn.ReLU, norm_layer=partial(nn.LayerNorm, eps=1e-6)
+        ),
+    }
+    
+    if model_name in model_constructors:
+        model = model_constructors[model_name]()
+    else:
+        print(f"  Warning: Unknown model {model_name}, using vit_small_patch16 as default")
+        model = model_constructors['vit_small_patch16']()
     
     try:
         model.load_state_dict(state_dict, strict=False)

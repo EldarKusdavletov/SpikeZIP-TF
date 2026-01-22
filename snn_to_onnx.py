@@ -230,18 +230,29 @@ def export_snn_to_onnx(checkpoint_path: str, output_path: str,
     
     # Create model
     from models_vit import vit_small_patch16, vit_base_patch16, vit_large_patch16
+    from functools import partial
+    import torch.nn as nn
     
     model_constructors = {
-        'vit_small_patch16': vit_small_patch16,
-        'vit_base_patch16': vit_base_patch16,
-        'vit_large_patch16': vit_large_patch16,
+        'vit_small_patch16': lambda: vit_small_patch16(
+            num_classes=1000, global_pool=False,
+            act_layer=nn.ReLU, norm_layer=partial(nn.LayerNorm, eps=1e-6)
+        ),
+        'vit_base_patch16': lambda: vit_base_patch16(
+            num_classes=1000, global_pool=False,
+            act_layer=nn.ReLU, norm_layer=partial(nn.LayerNorm, eps=1e-6)
+        ),
+        'vit_large_patch16': lambda: vit_large_patch16(
+            num_classes=1000, global_pool=False,
+            act_layer=nn.ReLU, norm_layer=partial(nn.LayerNorm, eps=1e-6)
+        ),
     }
     
     if model_name not in model_constructors:
         print(f"  ✗ Unknown model: {model_name}")
         return False
     
-    model = model_constructors[model_name](num_classes=1000, global_pool=False)
+    model = model_constructors[model_name]()
     
     try:
         model.load_state_dict(state_dict, strict=False)
