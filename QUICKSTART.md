@@ -19,7 +19,7 @@ This guide will help you get started with SpikeZIP-TF.
 ```
 
 This will:
-- Create a virtual environment (venv) if it doesn't exist
+- Create a virtual environment (.venv) if it doesn't exist
 - Activate the virtual environment
 - Install all required Python packages
 - Apply compatibility patches automatically
@@ -27,7 +27,7 @@ This will:
 
 **To activate the environment later:**
 ```bash
-source venv/bin/activate
+source .venv/bin/activate
 ```
 
 ### Option 2: Manual Setup

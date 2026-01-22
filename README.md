@@ -64,7 +64,7 @@ Before running any training scripts, you need to set up the Python environment w
 ./setup_environment.sh
 
 # This creates/activates a virtual environment and installs all dependencies
-# To activate the environment later: source venv/bin/activate
+# To activate the environment later: source .venv/bin/activate
 
 # Option 2: Manual setup
 pip install -r requirements.txt
