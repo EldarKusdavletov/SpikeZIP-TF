@@ -60,8 +60,11 @@ year={2024}
 Before running any training scripts, you need to set up the Python environment with the required dependencies:
 
 ```bash
-# Option 1: Automated setup (recommended)
+# Option 1: Automated setup with virtual environment (recommended)
 ./setup_environment.sh
+
+# This creates/activates a virtual environment and installs all dependencies
+# To activate the environment later: source venv/bin/activate
 
 # Option 2: Manual setup
 pip install -r requirements.txt
