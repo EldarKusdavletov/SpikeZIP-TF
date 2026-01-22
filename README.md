@@ -26,6 +26,7 @@
 ## Contents
 - [News](#news)
 - [Introduction](#introduction)
+- [Conversion Framework](#conversion-framework) :fire: **NEW**
 - [Usage](#Usage)
   - [Train](#Train)
   - [Conversion](#Conversion)
@@ -34,7 +35,8 @@
 ## News
 
 - [2024/6] Code of SpikeZip-TF is released!
-- [2024/12] Code of SpikeZip-TF in NLU tasks is released! You can view the code by switching to the NLU_tasks branch !! 
+- [2024/12] Code of SpikeZip-TF in NLU tasks is released! You can view the code by switching to the NLU_tasks branch !!
+- :fire: **[NEW]** Comprehensive conversion framework added! Supports ANN→QANN→SNN conversion in all variations, plus MLIR and ONNX export! 
 
 ## Introduction
 
@@ -190,4 +192,68 @@ CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch --nproc_per_node=1 --m
     --dist_eval --data_path /data1/ImageNet/ --output_dir /home/kang_you/SpikeZIP_transformer/output/ --log_dir /home/kang_you/SpikeZIP_transformer/output \
     --mode "SNN" --act_layer relu --eval --energy_eval --time_step 32 --encoding_type rate --level 16 --weight_quantization_bit 32 --define_params --mean 0.5 0.5 0.5 --std 0.5 0.5 0.5
 ```
+
+## Conversion Framework
+
+We now provide a comprehensive conversion framework for easy model conversion and export! :fire:
+
+### Quick Start with Conversion Framework
+
+```bash
+# 1. Download all pre-trained models
+python download_models.py --output-dir ./pretrained_models --models all
+
+# 2. Convert ANN to all QANN and SNN variations
+python convert_models.py \
+    --input ./pretrained_models/vit-small-patch16-relu-82.34.pth \
+    --output-dir ./converted_models \
+    --model-name vit_small_patch16 \
+    --all-variations
+
+# 3. Export SNN to MLIR
+python snn_to_mlir.py \
+    --input ./converted_models/vit_small_patch16_snn_q32_analog_t64.pth \
+    --output ./mlir_exports/vit_small_snn.mlir
+
+# 4. Export SNN to ONNX
+python snn_to_onnx.py \
+    --input ./converted_models/vit_small_patch16_snn_q32_analog_t64.pth \
+    --output ./onnx_exports/vit_small_snn.onnx
+
+# OR run the complete pipeline in one command:
+python run_conversion_pipeline.py --model-type vit-small
+```
+
+### Features
+
+The conversion framework provides:
+
+- **Automated Model Download**: Download all pre-trained ANN and QANN models with checksum verification
+- **Multi-Variation Conversion**: Convert to all quantization levels (Q8, Q16, Q32, Q64) and SNN configurations
+- **MLIR Export**: Translate SNN models to MLIR linalg dialect for compiler optimization
+- **ONNX Export**: Export SNN models to ONNX format with custom SNN operators
+- **Complete Pipeline**: One-command execution of the entire conversion workflow
+
+### Conversion Variations
+
+- **QANN**: 4 quantization levels (8, 16, 32, 64 bits)
+- **SNN**: 6 variations per QANN
+  - Time steps: 32, 64, 128
+  - Encodings: analog, rate
+- **Total**: 24 SNN models per ANN model (4 QANN × 6 SNN variations)
+
+### Documentation
+
+For complete documentation, see [CONVERSION_FRAMEWORK.md](CONVERSION_FRAMEWORK.md)
+
+For usage examples, run:
+```bash
+python examples_conversion_framework.py
+```
+
+For verification, run:
+```bash
+python verify_conversion_framework.py
+```
+
 
