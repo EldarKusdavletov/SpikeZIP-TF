@@ -4,6 +4,20 @@
 
 set -e
 
+# Virtual environment name
+VENV_NAME="venv"
+
+# Check if virtual environment exists
+if [ -d "$VENV_NAME" ]; then
+    echo "Virtual environment '$VENV_NAME' already exists. Activating..."
+    source "$VENV_NAME/bin/activate"
+else
+    echo "Creating virtual environment '$VENV_NAME'..."
+    python3 -m venv "$VENV_NAME"
+    echo "Activating virtual environment..."
+    source "$VENV_NAME/bin/activate"
+fi
+
 echo "Installing Python dependencies..."
 pip install -r requirements.txt
 
@@ -57,6 +71,9 @@ PYTHON_SCRIPT
 
 echo ""
 echo "Setup complete! You can now run the training scripts."
+echo ""
+echo "To activate the virtual environment in the future, run:"
+echo "  source venv/bin/activate"
 echo ""
 echo "Example usage:"
 echo "  python main_finetune.py --data_path /path/to/imagenet --model vit_small_patch16 ..."
