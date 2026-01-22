@@ -61,7 +61,9 @@ def calculate_md5(filepath: str, chunk_size: int = 8192) -> str:
     with open(filepath, 'rb') as f:
         for chunk in iter(lambda: f.read(chunk_size), b''):
             md5_hash.update(chunk)
-    return md5_hash.hexdigest()[:7]  # Return first 7 characters to match expected format
+    # Return first 7 characters to match expected format from documentation
+    # Note: This matches the partial MD5 provided in the model documentation
+    return md5_hash.hexdigest()[:7]
 
 
 def download_file(url: str, destination: str, description: str = "") -> bool:

@@ -79,8 +79,8 @@ class SNNONNXExporter:
             def forward(ctx, input, encoding_type, time_steps):
                 """Forward pass (for tracing)."""
                 if encoding_type == 'rate':
-                    # Rate encoding
-                    return torch.rand_like(input.unsqueeze(0).repeat(time_steps, 1, 1)) < input.unsqueeze(0)
+                    # Rate encoding - convert boolean to float
+                    return (torch.rand_like(input.unsqueeze(0).repeat(time_steps, 1, 1)) < input.unsqueeze(0)).float()
                 else:  # analog
                     # Analog encoding
                     return input.unsqueeze(0).repeat(time_steps, 1, 1) / time_steps

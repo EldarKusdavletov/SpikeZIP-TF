@@ -21,7 +21,7 @@ from spike_quan_wrapper import myquan_replace, SNNWrapper
 
 # Conversion configurations
 QUANTIZATION_LEVELS = [8, 16, 32, 64]
-TIME_STEPS = [32, 64, 128, 256]
+TIME_STEPS = [32, 64, 128]  # Commonly used time steps
 ENCODING_TYPES = ['analog', 'rate']
 WEIGHT_QUANTIZATION_BITS = [8, 16, 32]
 

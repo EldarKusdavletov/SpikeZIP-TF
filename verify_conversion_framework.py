@@ -37,6 +37,7 @@ def test_imports():
     except ImportError:
         torch_available = False
         print("✗ PyTorch not available (required for conversion modules)")
+        print("  Install with: pip install -r requirements.txt")
     
     if torch_available:
         for module_name in ['convert_models', 'snn_to_mlir', 'snn_to_onnx', 'run_conversion_pipeline']:
